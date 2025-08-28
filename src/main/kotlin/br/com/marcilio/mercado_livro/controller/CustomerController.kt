@@ -2,7 +2,6 @@ package br.com.marcilio.mercado_livro.controller
 
 import br.com.marcilio.mercado_livro.dto.request.CustomerDto
 import br.com.marcilio.mercado_livro.dto.response.CustomerResponseDto
-import br.com.marcilio.mercado_livro.model.CustomerModel
 import br.com.marcilio.mercado_livro.service.CustomerService
 import br.com.marcilio.mercado_livro.utils.BuildResponse
 import br.com.marcilio.mercado_livro.utils.DefaultResponse
@@ -27,6 +26,18 @@ open class CustomerController(
         )
         return ResponseEntity.status(HttpStatus.OK).body(response)
     }
+
+    @GetMapping
+    open fun getCustomerAll(): ResponseEntity<DefaultResponse<List<CustomerResponseDto>>> {
+        val list = service.findAll()
+        val response: DefaultResponse<List<CustomerResponseDto>> = build.buildResponse(
+            data = list,
+            message = "Solicitação realizada con sucesso!",
+            status = HttpStatus.OK.value()
+        )
+        return ResponseEntity.status(HttpStatus.OK).body(response)
+    }
+
 
     @PostMapping
     open fun create(@RequestBody customer: CustomerDto): ResponseEntity<DefaultResponse<CustomerResponseDto>> {
