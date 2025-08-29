@@ -7,5 +7,6 @@ interface CustomerService {
     fun criar(customer: CustomerDto): CustomerResponseDto
     fun findById(iden: Long): CustomerResponseDto
     fun findAll(): MutableList<CustomerResponseDto>
-    fun update(id: Long, customer: br.com.marcilio.mercado_livro.dto.request.CustomerDto): br.com.marcilio.mercado_livro.dto.response.CustomerResponseDto
+    fun update(id: Long, customer: CustomerDto): CustomerResponseDto
+    fun delete(id: Any): String
 }
