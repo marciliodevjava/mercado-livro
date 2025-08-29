@@ -29,6 +29,15 @@ class CustomerServiceImpl : CustomerService {
         return list
     }
 
+    override fun update(id: Long, customer: CustomerDto): CustomerResponseDto {
+        val data: CustomerResponseDto = list.filter { it.id == id }.map { existing ->
+            existing.name = customer.name
+            existing.email = customer.email
+            existing
+        }.firstOrNull()?:throw IllegalArgumentException("Customer not found.")
+        return data
+    }
+
     fun number(){
         genNum++
     }
