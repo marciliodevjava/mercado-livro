@@ -49,4 +49,17 @@ open class CustomerController(
         )
         return ResponseEntity.status(HttpStatus.CREATED).body(response)
     }
+
+    @PatchMapping("/{id}")
+    open fun update(
+        @PathVariable id: Long,
+        @RequestBody customer: CustomerDto
+    ): ResponseEntity<DefaultResponse<CustomerResponseDto>> {
+        var data: CustomerResponseDto = service.update(id, customer)
+        val response: DefaultResponse<CustomerResponseDto> = build.buildResponse(
+            data = data,
+            message = "Customer updated with success.", status = HttpStatus.OK.value()
+        )
+        return ResponseEntity.status(HttpStatus.OK).body(response)
+    }
 }
