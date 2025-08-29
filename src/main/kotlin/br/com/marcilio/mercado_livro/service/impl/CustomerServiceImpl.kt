@@ -38,6 +38,11 @@ class CustomerServiceImpl : CustomerService {
         return data
     }
 
+    override fun delete(id: Any): String {
+        list.removeIf { it.id==id }
+        return "Item removed successfully!"
+    }
+
     fun number(){
         genNum++
     }
