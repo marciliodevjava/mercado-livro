@@ -58,8 +58,19 @@ open class CustomerController(
         var data: CustomerResponseDto = service.update(id, customer)
         val response: DefaultResponse<CustomerResponseDto> = build.buildResponse(
             data = data,
-            message = "Customer updated with success.", status = HttpStatus.OK.value()
+            message = "Customer updated with success.", status = HttpStatus.NO_CONTENT.value()
         )
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response)
+    }
+
+    @DeleteMapping("/{id}")
+    open fun delete(@PathVariable id: Long): ResponseEntity<DefaultResponse<String>> {
+        var message: String = service.delete(id)
+        val response: DefaultResponse<String> = build.buildResponse(data = message,
+            message = message,
+            status = HttpStatus.OK.value())
         return ResponseEntity.status(HttpStatus.OK).body(response)
     }
+
+
 }
