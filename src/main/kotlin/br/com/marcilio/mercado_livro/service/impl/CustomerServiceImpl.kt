@@ -2,48 +2,56 @@ package br.com.marcilio.mercado_livro.service.impl
 
 import br.com.marcilio.mercado_livro.dto.request.CustomerDto
 import br.com.marcilio.mercado_livro.dto.response.CustomerResponseDto
+import br.com.marcilio.mercado_livro.extension.toCustomerModel
+import br.com.marcilio.mercado_livro.model.CustomerModel
+import br.com.marcilio.mercado_livro.repository.CustomerRepository
 import br.com.marcilio.mercado_livro.service.CustomerService
 import org.springframework.stereotype.Service
 
 @Service
-class CustomerServiceImpl : CustomerService {
+class CustomerServiceImpl(val customerRepository: CustomerRepository) : CustomerService {
     open lateinit var list: MutableList<CustomerResponseDto>
-    var genNum: Long = 1;
+
     init {
         list = mutableListOf()
     }
 
     override fun criar(customer: CustomerDto): CustomerResponseDto {
-        val dados: CustomerResponseDto = CustomerResponseDto(genNum,customer.name, customer.email)
-        list.add(dados)
-        number()
-        return dados
+        var customer: CustomerModel = customer.toCustomerModel()
+        customer = customerRepository.save(customer)
+        return customer.toCustomerModel()
     }
 
     override fun findById(iden: Long): CustomerResponseDto {
-        val customer: CustomerResponseDto = list.first { it.id == iden } as CustomerResponseDto
-        return customer
+        var customer: CustomerModel =
+            customerRepository.findById(iden).orElseThrow { RuntimeException("Não existe esse dado") }
+        return customer.toCustomerModel()
     }
 
-    override fun findAll(): MutableList<CustomerResponseDto>{
-        return list
+    override fun findAll(): MutableList<CustomerResponseDto> {
+        var list: MutableList<CustomerModel> = customerRepository.findAll()
+        return list.map { it ->
+            CustomerResponseDto(
+                id = it.id!!,
+                name = it.name,
+                email = it.email
+            )
+        }.toMutableList()
     }
 
     override fun update(id: Long, customer: CustomerDto): CustomerResponseDto {
-        val data: CustomerResponseDto = list.filter { it.id == id }.map { existing ->
-            existing.name = customer.name
-            existing.email = customer.email
-            existing
-        }.firstOrNull()?:throw IllegalArgumentException("Customer not found.")
-        return data
+        var customerModel: CustomerModel =
+            customerRepository.findById(id).orElseThrow { RuntimeException("Customer not found") }
+        customerModel.name = customer.name
+        customerModel.email = customer.email
+        customerRepository.save(customerModel)
+        return customerModel.toCustomerModel()
     }
 
     override fun delete(id: Any): String {
-        list.removeIf { it.id==id }
+        val iden: Long = (id as Number).toLong()
+        customerRepository.deleteById(iden)
         return "Item removed successfully!"
     }
 
-    fun number(){
-        genNum++
-    }
 }
