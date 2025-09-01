@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: Mercado-Livro
+  datasource:
+    url: jdbc:mysql://localhost:3306/mercadolivro?createDatabaseIfNotExist=true
+    username: root
+    password: 1234567890
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
