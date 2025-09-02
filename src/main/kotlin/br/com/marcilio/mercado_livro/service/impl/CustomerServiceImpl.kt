@@ -28,9 +28,19 @@ class CustomerServiceImpl(val customerRepository: CustomerRepository) : Customer
         return customer.toCustomerModel()
     }
 
-    override fun findAll(): MutableList<CustomerResponseDto> {
-        var list: MutableList<CustomerModel> = customerRepository.findAll()
-        return list.map { it ->
+    override fun findAll(name: String?): MutableList<CustomerResponseDto> {
+        name?.let {
+            var list: MutableList<CustomerModel> = customerRepository.findByNameContainingIgnoreCase(it)
+            return list.map { it ->
+                CustomerResponseDto(
+                    id = it.id!!,
+                    name = it.name,
+                    email = it.email
+                )
+            }.toMutableList()
+        }
+        var listAll: MutableList<CustomerModel> = customerRepository.findAll()
+        return listAll.map { it ->
             CustomerResponseDto(
                 id = it.id!!,
                 name = it.name,
