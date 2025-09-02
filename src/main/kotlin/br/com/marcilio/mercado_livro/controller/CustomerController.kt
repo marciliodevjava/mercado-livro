@@ -29,16 +29,7 @@ open class CustomerController(
 
     @GetMapping
     open fun getCustomerAll(@RequestParam name: String?): ResponseEntity<DefaultResponse<List<CustomerResponseDto>>> {
-        val list = service.findAll()
-        name?.let {
-            val find: MutableList<CustomerResponseDto> = list.filter { it.name.contains(name, ignoreCase = true) } as MutableList<CustomerResponseDto>
-            val response: DefaultResponse<List<CustomerResponseDto>> = build.buildResponse(
-                data = find,
-                message = "Solicitação realizada con sucesso!",
-                status = HttpStatus.OK.value()
-            )
-            return ResponseEntity.status(HttpStatus.OK).body(response)
-        }
+        val list = service.findAll(name)
         val response: DefaultResponse<List<CustomerResponseDto>> = build.buildResponse(
             data = list,
             message = "Solicitação realizada con sucesso!",
