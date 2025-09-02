@@ -6,7 +6,7 @@ import br.com.marcilio.mercado_livro.dto.response.CustomerResponseDto
 interface CustomerService {
     fun criar(customer: CustomerDto): CustomerResponseDto
     fun findById(iden: Long): CustomerResponseDto
-    fun findAll(): MutableList<CustomerResponseDto>
+    fun findAll(name: String?): MutableList<CustomerResponseDto>
     fun update(id: Long, customer: CustomerDto): CustomerResponseDto
     fun delete(id: Any): String
 }
