@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface CustomerRepository: JpaRepository<CustomerModel, Long>{
+    fun findByNameContainingIgnoreCase(name:String): MutableList<CustomerModel>
 }
